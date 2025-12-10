@@ -105,11 +105,14 @@ class OverlayWindow: UIWindow {
     
     @objc private func requestsDidChange() {
         DispatchQueue.main.async {
-            let title: String? = NetRecorder.shared.requests.isEmpty 
-            ? nil
-            : String(format: "(%d)", NetRecorder.shared.requests.count)
+            guard NetRecorder.shared.requests.count > 0 else {
+                self.floatingButton.configuration?.title = nil
+                self.floatingButton.configuration?.imagePadding = 0
+                return
+            }
             
-            self.floatingButton.setTitle(title, for: .normal)
+            self.floatingButton.configuration?.title = String(format: "(%d)", NetRecorder.shared.requests.count)
+            self.floatingButton.configuration?.imagePadding = 8
         }
     }
     
