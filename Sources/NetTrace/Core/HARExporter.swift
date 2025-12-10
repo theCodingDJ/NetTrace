@@ -13,7 +13,7 @@ public enum HARExportError: LocalizedError {
 
 public class HARExporter {
     
-    func exportList(_ requests: [HTTPRequestLog]) throws -> URL {
+    func exportList(_ requests: [HTTPRequestLog], fileName: String) throws -> URL {
         
         guard requests.isEmpty == false else {
             throw HARExportError.emptyList
@@ -23,7 +23,6 @@ public class HARExporter {
         
         // Create temporary file
         let tempDirectory = FileManager.default.temporaryDirectory
-        let fileName = "NetTrace-export-\(Date().timeIntervalSince1970).har"
         let fileURL = tempDirectory.appendingPathComponent(fileName)
         
         try harData.write(to: fileURL)
@@ -76,7 +75,7 @@ public class HARExporter {
         
         // Response
         if let response = request.response {
-            var harResponse: [String: Any] = [
+            let harResponse: [String: Any] = [
                 "status": response.statusCode,
                 "statusText": HTTPURLResponse.localizedString(forStatusCode: response.statusCode),
                 "httpVersion": "HTTP/1.1",

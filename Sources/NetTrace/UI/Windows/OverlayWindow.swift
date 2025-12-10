@@ -12,13 +12,19 @@ class OverlayWindow: UIWindow {
     private lazy var floatingButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
         configuration.buttonSize = .large
-        configuration.image = UIImage(systemName: "arrow.up.arrow.down.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 24))
+        configuration.image = UIImage(systemName: "arrow.up.arrow.down.circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 24))
         configuration.baseBackgroundColor = UIColor.label
         configuration.baseForegroundColor = UIColor.systemBackground
         configuration.contentInsets = .zero
-        configuration.imagePlacement = .all
+        configuration.imagePlacement = .leading
         configuration.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(scale: .large)
         configuration.cornerStyle = .capsule
+        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.foregroundColor = UIColor.label
+            outgoing.font = UIFont.boldSystemFont(ofSize: 13)
+            return outgoing
+        }
         
         let action = UIAction { [weak self] _ in
             self?.buttonTapped()
@@ -75,9 +81,16 @@ class OverlayWindow: UIWindow {
         NSLayoutConstraint.activate([
             floatingButton.leadingAnchor.constraint(equalTo: rootViewController.view.safeAreaLayoutGuide.leadingAnchor, constant: 24),
             floatingButton.bottomAnchor.constraint(equalTo: rootViewController.view.safeAreaLayoutGuide.bottomAnchor, constant: -24),
-            floatingButton.widthAnchor.constraint(equalToConstant: 48),
             floatingButton.heightAnchor.constraint(equalToConstant: 48)
         ])
+        
+        /// Listen for new network requests.
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(requestsDidChange),
+            name: NSNotification.Name("NetTraceRequestsChanged"),
+            object: nil
+        )
     }
     
     // MARK: - Actions
@@ -87,6 +100,16 @@ class OverlayWindow: UIWindow {
             hideRequestList()
         } else {
             showRequestList()
+        }
+    }
+    
+    @objc private func requestsDidChange() {
+        DispatchQueue.main.async {
+            let title: String? = NetRecorder.shared.requests.isEmpty 
+            ? nil
+            : String(format: "(%d)", NetRecorder.shared.requests.count)
+            
+            self.floatingButton.setTitle(title, for: .normal)
         }
     }
     
