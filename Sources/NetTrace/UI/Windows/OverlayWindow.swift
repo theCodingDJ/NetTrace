@@ -81,7 +81,6 @@ class OverlayWindow: UIWindow {
         NSLayoutConstraint.activate([
             floatingButton.leadingAnchor.constraint(equalTo: rootViewController.view.safeAreaLayoutGuide.leadingAnchor, constant: 24),
             floatingButton.bottomAnchor.constraint(equalTo: rootViewController.view.safeAreaLayoutGuide.bottomAnchor, constant: -24),
-            floatingButton.heightAnchor.constraint(equalToConstant: 48)
         ])
         
         /// Listen for new network requests.
