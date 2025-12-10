@@ -146,7 +146,8 @@ class RequestListViewController: UIViewController {
         let exporter = HARExporter()
         
         do {
-            let fileURL = try exporter.exportList(filteredRequests)
+            let fileName = "NetTrace-export-\(Date().timeIntervalSince1970).har"
+            let fileURL = try exporter.exportList(filteredRequests, fileName: fileName)
             
             let activityViewController = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
             

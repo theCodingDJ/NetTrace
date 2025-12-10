@@ -345,7 +345,7 @@ class RequestDetailViewController: UIViewController {
             let timestamp = Int(Date().timeIntervalSince1970)
             let fileName = "NetTrace-\(method)-\(path)-\(timestamp).har"
             
-            let fileURL = try exporter.exportList([request])
+            let fileURL = try exporter.exportList([request], fileName: fileName)
 
             // Present share sheet
             let activityVC = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
