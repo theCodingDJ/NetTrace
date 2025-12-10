@@ -21,7 +21,7 @@ class OverlayWindow: UIWindow {
         configuration.cornerStyle = .capsule
         configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            outgoing.foregroundColor = UIColor.label
+            outgoing.foregroundColor = UIColor.systemBackground
             outgoing.font = UIFont.boldSystemFont(ofSize: 13)
             return outgoing
         }
