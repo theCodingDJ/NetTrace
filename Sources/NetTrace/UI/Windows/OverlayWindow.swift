@@ -15,7 +15,7 @@ class OverlayWindow: UIWindow {
         configuration.image = UIImage(systemName: "arrow.up.arrow.down.circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 24))
         configuration.baseBackgroundColor = UIColor.label
         configuration.baseForegroundColor = UIColor.systemBackground
-        configuration.contentInsets = .zero
+        configuration.contentInsets = .init(top: 4, leading: 4, bottom: 4, trailing: 4)
         configuration.imagePlacement = .leading
         configuration.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(scale: .large)
         configuration.cornerStyle = .capsule
@@ -112,7 +112,7 @@ class OverlayWindow: UIWindow {
             }
             
             self.floatingButton.configuration?.title = String(format: "(%d)", NetRecorder.shared.requests.count)
-            self.floatingButton.configuration?.imagePadding = 8
+            self.floatingButton.configuration?.imagePadding = 4
         }
     }
     
