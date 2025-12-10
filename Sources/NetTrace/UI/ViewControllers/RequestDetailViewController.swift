@@ -28,8 +28,21 @@ class RequestDetailViewController: UIViewController {
         view.backgroundColor = .systemBackground
         title = "Request Details"
         
+        setupNavigationBar()
+
         setupScrollView()
         displayRequestDetails()
+    }
+    
+    private func setupNavigationBar() {
+        let exportButton = UIBarButtonItem(
+            image: UIImage(systemName: "square.and.arrow.up"),
+            style: .plain,
+            target: self,
+            action: #selector(exportTapped)
+        )
+        
+        navigationItem.rightBarButtonItem = exportButton
     }
     
     private func setupScrollView() {
@@ -310,6 +323,7 @@ class RequestDetailViewController: UIViewController {
     }
     
     // MARK: - JSONTree Viewer
+    
     private func showJsonTree(for json: String) {
         let path = request.url?.path ?? "Unknown"
         
@@ -318,5 +332,36 @@ class RequestDetailViewController: UIViewController {
             jsonString: json
         )
         navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    // MARK: - HAR Export
+    
+    @objc private func exportTapped() {
+        let exporter = HARExporter()
+        
+        do {
+            let method = request.method ?? "GET"
+            let path = request.url?.lastPathComponent ?? "request"
+            let timestamp = Int(Date().timeIntervalSince1970)
+            let fileName = "NetTrace-\(method)-\(path)-\(timestamp).har"
+            
+            let fileURL = try exporter.exportList([request])
+
+            // Present share sheet
+            let activityVC = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
+            
+            present(activityVC, animated: true)
+            
+        } catch {
+            let alertController = UIAlertController(
+                title: "Export Failed",
+                message: "Failed to export HAR file: \(error.localizedDescription)",
+                preferredStyle: .alert
+            )
+            alertController.addAction(UIAlertAction(title: "OK", style: .default))
+            
+            present(alertController, animated: true)
+            
+        }
     }
 }

@@ -63,12 +63,22 @@ class RequestListViewController: UIViewController {
             action: #selector(closeTapped)
         )
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
+        let trashButton = UIBarButtonItem(
             barButtonSystemItem: .trash,
             target: self,
             action: #selector(clearTapped)
         )
+        
+        let exportButton = UIBarButtonItem(
+            image: UIImage(systemName: "square.and.arrow.up"),
+            style: .plain,
+            target: self,
+            action: #selector(exportTapped)
+        )
+        
+        navigationItem.rightBarButtonItems = [trashButton, exportButton]
     }
+
     
     private func setupTableView() {
         tableView = UITableView(frame: view.bounds, style: .plain)
@@ -130,6 +140,39 @@ class RequestListViewController: UIViewController {
     @objc private func clearTapped() {
         NetRecorder.shared.clear()
         loadRequests()
+    }
+    
+    @objc private func exportTapped() {
+        let exporter = HARExporter()
+        
+        do {
+            let fileURL = try exporter.exportList(filteredRequests)
+            
+            let activityViewController = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
+            
+            present(activityViewController, animated: true)
+            
+        } catch HARExportError.emptyList {
+            let alertController = UIAlertController(
+                title: "Export Failed",
+                message: "No network requests to export.",
+                preferredStyle: .alert
+            )
+            alertController.addAction(UIAlertAction(title: "OK", style: .default))
+            
+            present(alertController, animated: true)
+            
+        } catch {
+            let alertController = UIAlertController(
+                title: "Export Failed",
+                message: "Failed to export HAR file: \(error.localizedDescription)",
+                preferredStyle: .alert
+            )
+            alertController.addAction(UIAlertAction(title: "OK", style: .default))
+            
+            present(alertController, animated: true)
+            
+        }
     }
 }
 
