@@ -17,6 +17,7 @@ iOS network debugging framework with real-time monitoring, JSON tree viewer, and
 - Copy JSON responses to clipboard
 - Color-coded status indicators
 - Non-intrusive floating button overlay
+- HAR files export functionality to save the list and a single viewed request.
 
 ## Installation
 
@@ -45,15 +46,26 @@ Then add to your target:
 ```
 
 ## Quick Start
-
+Add the following into your *AppDelegate*:
 ```swift
 import NetTrace
 
-// In AppDelegate or App init
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+
 #if DEBUG
-NetTrace.shared.start()
+	NetTrace.shared.start()
 #endif
+
+	/// Other initialization code here.
+	return true
+}
 ```
+
+## HAR Export
+NetTrace has the capability to export [HAR files](https://en.wikipedia.org/wiki/HAR_(file_format)) to share with backend developers, or view with Charles Proxy/Postman/Proxyman.
+> [!TIP]
+> When working with iPhone Simulator, to find your stored `.har` files open your Terminal,
+> run `cd ~/Library/Developer/CoreSimulator/Devices/<Simulator UDID>` (you can find your Simulator's UDID in **Xcode** → **Window menu** → **Devices & Simulators**), then run the following command in your Terminal: `find . -name '*.har'`.
 
 ## Available Functions
 
