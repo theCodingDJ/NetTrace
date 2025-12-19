@@ -4,6 +4,7 @@
   <img src="https://img.shields.io/badge/Swift-5.10+-orange.svg" />
   <img src="https://img.shields.io/badge/iOS-15.0+-blue.svg" />
   <img src="https://img.shields.io/badge/License-MIT-green.svg" />
+  <img src="https://img.shields.io/coderabbit/prs/github/theCodingDJ/NetTrace?utm_source=oss&utm_medium=github&utm_campaign=theCodingDJ%2FNetTrace&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews" />
 </p>
 
 iOS network debugging framework with real-time monitoring, JSON tree viewer, and request inspection.
